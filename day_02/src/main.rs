@@ -90,7 +90,28 @@ async fn main() -> Result<(), Error> {
         }
     }
 
-    println!("Final position: {:?}", (position * depth));
+    println!("Part 1 - Final position: {:?}", (position * depth));
+
+    let mut position = 0;
+    let mut depth = 0;
+    let mut aim = 0;
+
+    for instruction in instructions.iter() {
+        match instruction {
+            Instruction::Forward(value) => {
+                position += value;
+                depth += aim * value;
+            },
+            Instruction::Down(value) => {
+                aim += value;
+            },
+            Instruction::Up(value) => {
+                aim -= value;
+            },
+        }
+    }
+
+    println!("Part 2 - Final position: {:?}", (position * depth));
 
     Ok(())
 }
