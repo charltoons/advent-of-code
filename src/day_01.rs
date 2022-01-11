@@ -36,6 +36,12 @@ pub fn part_2(depths: &Vec<String>) -> u32 {
         }
 
         // Calculate the first window
+        /**
+        * 111  window_a            
+        * 112  window_a                 
+        * 113  window_a -> sum WINDOW_A  
+        * 114                            
+        */
         let mut window_a: u32 = 0;
         let start_idx = i;
         let end_idx = start_idx + WINDOW_SIZE;
@@ -46,7 +52,12 @@ pub fn part_2(depths: &Vec<String>) -> u32 {
           };
         }
 
-        // Calculate the second window
+        /**
+        * 111  window_a            
+        * 112  window_a                  window_b  
+        * 113  window_a -> sum window_a  window_b    
+        * 114                            window_b -> sum WINDOW_B
+        */
         let mut window_b: u32 = 0;
         let start_idx = i + 1;
         let end_idx = start_idx + WINDOW_SIZE;
