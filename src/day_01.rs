@@ -4,23 +4,22 @@ pub fn part_1(depths: &Vec<String>) -> u32 {
 
     // Loop through the depths
     for depth_str in depths {
+        let depth = match depth_str.parse::<u32>() {
+            Ok(depth) => depth,
+            Err(_) => continue,
+        };
 
-      let depth = match depth_str.parse::<u32>() {
-        Ok(depth) => depth,
-        Err(_) => continue,
-      };
+        // If this is the first measurement, set the previous value
+        if let None = previous_value {
+            previous_value = Some(depth);
+            continue;
+        }
 
-      // If this is the first measurement, set the previous value
-      if let None = previous_value {
+        // If the value is greater than the previous value, increase the number of increases
+        if depth > previous_value.unwrap() {
+            increases += 1;
+        }
         previous_value = Some(depth);
-        continue;
-      }
-
-      // If the value is greater than the previous value, increase the number of increases
-      if depth > previous_value.unwrap() {
-        increases += 1;
-      }
-      previous_value = Some(depth);
     }
     increases
 }
@@ -29,43 +28,41 @@ const WINDOW_SIZE: usize = 3;
 pub fn part_2(depths: &Vec<String>) -> u32 {
     let mut increases = 0;
     for (i, _) in depths.iter().enumerate() {
-
         // if we're past the final two windows to compare
         if (i + WINDOW_SIZE + 1) > (depths.len() - 1) {
             break;
         }
 
         // Calculate the first window
-        /**
-        * 111  window_a            
-        * 112  window_a                 
-        * 113  window_a -> sum WINDOW_A  
-        * 114                            
-        */
+        //
+        // 111  window_a            
+        // 112  window_a                 
+        // 113  window_a -> sum WINDOW_A  
+        // 114                            
         let mut window_a: u32 = 0;
         let start_idx = i;
         let end_idx = start_idx + WINDOW_SIZE;
         for j in start_idx..end_idx {
-          match depths[j].parse::<u32>() {
-            Ok(depth) => window_a += depth,
-            Err(_) => panic!("Could not parse depth {}", depths[j]),
-          };
+            match depths[j].parse::<u32>() {
+                Ok(depth) => window_a += depth,
+                Err(_) => panic!("Could not parse depth {}", depths[j]),
+            };
         }
 
-        /**
-        * 111  window_a            
-        * 112  window_a                  window_b  
-        * 113  window_a -> sum window_a  window_b    
-        * 114                            window_b -> sum WINDOW_B
-        */
+        // Calculate the second window
+        //
+        // 111  window_a            
+        // 112  window_a                  window_b  
+        // 113  window_a -> sum window_a  window_b    
+        // 114                            window_b -> sum WINDOW_B
         let mut window_b: u32 = 0;
         let start_idx = i + 1;
         let end_idx = start_idx + WINDOW_SIZE;
         for j in start_idx..end_idx {
-          match depths[j].parse::<u32>() {
-            Ok(depth) => window_b += depth,
-            Err(_) => panic!("Could not parse depth {}", depths[j]),
-          };
+            match depths[j].parse::<u32>() {
+                Ok(depth) => window_b += depth,
+                Err(_) => panic!("Could not parse depth {}", depths[j]),
+            };
         }
 
         // Record windowed depth increases
